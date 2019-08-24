@@ -8,11 +8,12 @@ def makeSure(libname):
 	except ImportError:
 		raise VersionError("Please upgrade your Python interpreter.")
 	try:
-		importlib.import_module(libname)
+		globals()[libname] = importlib.import_module(libname)
+		return (0, -1, -1)
 	except ModuleNotFoundError as e:
 		try:
 			pipit("install "+libname)
-			importlib.import_module(libname)
+			globals()[libname] = importlib.import_module(libname)
 			return (0, e, -1)
 		except Exception as f:
 			return (-1, e, f)
